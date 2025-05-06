@@ -1,5 +1,3 @@
-export default {
-     environments: {
-       node: true,
-     },
-   };
+module.exports = {
+    presets: ['@babel/preset-env'], // Укажите используемые пресеты
+};

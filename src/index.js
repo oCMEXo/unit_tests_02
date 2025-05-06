@@ -1,5 +1,2 @@
-const greet = (name) => {
-  console.log(`Hello, ${name}!`);
-};
-
-greet("World");
+const test = "example";
+console.log(test);
