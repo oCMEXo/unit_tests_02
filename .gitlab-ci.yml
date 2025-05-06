@@ -6,6 +6,8 @@ lint:
   image: node:latest
   script:
     - npm ci
-    - npx eslint .
+    - chmod +x node_modules/.bin/eslint
+    - npm run lint
+
   only:
     - merge_requests

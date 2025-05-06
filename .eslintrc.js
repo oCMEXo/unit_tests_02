@@ -1,16 +1,16 @@
 module.exports = {
   env: {
     node: true, // Добавляет глобальные переменные для Node.js
-    es2021: true // Поддержка синтаксиса ECMAScript 2021
+    es2021: true, // Поддержка синтаксиса ECMAScript 2021
   },
   extends: [
-    'eslint:recommended'
+    'eslint:recommended',
   ],
   parserOptions: {
     ecmaVersion: 'latest',
-    sourceType: 'module'
+    sourceType: 'module',
   },
   rules: {
     // Ваши правила здесь
-  }
+  },
 };
