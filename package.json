@@ -9,7 +9,7 @@
     "coverage": "c8 --reporter=html --reporter=text mocha",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "prepare": "husky install"
+    "prepare": "husky install || true"
   },
   "lint-staged": {
     "*.js": "npm run lint"
