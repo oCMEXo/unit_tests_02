@@ -1,15 +1,14 @@
 module.exports = {
 
-    'env': {
+  'env': {
 
-        mocha: true,
-        node: true,
+    mocha: true,
+    node: true,
 
-    },
-    plugins: ["mocha"],
-    rules: {
-        "mocha/no-exclusive-tests": "error",
-    },
-
+  },
+  plugins: ['mocha'],
+  rules: {
+    'mocha/no-exclusive-tests': 'error',
+  },
 
 };
