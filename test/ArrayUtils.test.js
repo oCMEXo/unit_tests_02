@@ -1,8 +1,8 @@
 /* global describe, it */
 /* eslint-env node */
 
-import { expect } from 'chai'; // Используем Chai для тестов
-import { findMax, findMin, sortArray } from '../utils/ArrayUtils.js'; // Импортируем тестируемые функции
+import { expect } from 'chai';
+import { findMax, findMin, sortArray } from '../utils/arrayUntils.js';
 
 describe('ArrayUtils', () => {
   describe('findMax', () => {

@@ -6,6 +6,7 @@ export default {
     globals: {
       browser: true,
       node: true,
+      model: true,
     },
   },
   rules: {

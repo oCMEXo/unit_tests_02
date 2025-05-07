@@ -1,7 +1,7 @@
 /* global describe, it */
 /* eslint-env node */
 
-import { expect } from 'chai'; // Предположительно используется chai
+import { expect } from 'chai';
 import { someFunctionToTest } from '../utils/studentKnowledgeCheckerUtil.js';
 
 describe('studentKnowledgeCheckerUtil', () => {
@@ -14,6 +14,4 @@ describe('studentKnowledgeCheckerUtil', () => {
     const result = someFunctionToTest('edge case input');
     expect(result).to.equal('expected edge case output');
   });
-
-  // Добавьте другие тестовые случаи по необходимости
 });

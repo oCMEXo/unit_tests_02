@@ -1,8 +1,8 @@
 /* global describe, it */
 /* eslint-env node */
 
-import { expect } from 'chai'; // Предполагается использование chai
-import { add, subtract, multiply, divide } from '../utils/mathUtils.js'; // Импорт тестируемых функций
+import { expect } from 'chai';
+import { add, subtract, multiply, divide } from '../utils/mathUtils.js';
 
 describe('mathUtils', () => {
   describe('add', () => {

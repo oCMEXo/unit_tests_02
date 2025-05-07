@@ -1,8 +1,8 @@
 /* global describe, it */
 /* eslint-env node */
 
-import { expect } from 'chai'; // Предполагается использование chai для тестов
-import { someStringFunction } from '../utils/stringUtils.js'; // Импорт тестируемой функции
+import { expect } from 'chai';
+import { someStringFunction } from '../utils/stringUtils.js';
 
 describe('stringUtils', () => {
   describe('someStringFunction', () => {
