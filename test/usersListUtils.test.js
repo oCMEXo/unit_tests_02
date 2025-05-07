@@ -1,4 +1,5 @@
-/* eslint-env mocha, node */
+/* global describe, it */
+/* eslint-env node */
 
 import { expect } from 'chai';
 import { filterUsersByAge } from '../utils/usersListUtils.js';

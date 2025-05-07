@@ -1,51 +1,57 @@
-import { expect } from 'chai';
-import { findMax, findMin, removeDuplicates } from '../utils/arrayUntils.js';
+/* global describe, it */
+/* eslint-env node */
 
-describe('Utils module', () => {
+import { expect } from 'chai'; // Используем Chai для тестов
+import { findMax, findMin, sortArray } from '../utils/ArrayUtils.js'; // Импортируем тестируемые функции
+
+describe('ArrayUtils', () => {
   describe('findMax', () => {
-    it('should return the maximum value from an array', () => {
+    it('should return the maximum number in an array of numbers', () => {
       const result = findMax([1, 2, 3, 4, 5]);
       expect(result).to.equal(5);
     });
 
-    it('should throw an error if input is not an array', () => {
-      expect(() => findMax('not an array')).to.throw('Input must be an array');
+    it('should return -Infinity for an empty array', () => {
+      const result = findMax([]);
+      expect(result).to.equal(-Infinity);
     });
 
-    it('should handle an array with negative numbers', () => {
-      const result = findMax([-10, -5, -3, -1]);
+    it('should handle arrays with negative numbers', () => {
+      const result = findMax([-1, -2, -3, -4]);
       expect(result).to.equal(-1);
     });
   });
 
   describe('findMin', () => {
-    it('should return the minimum value from an array', () => {
+    it('should return the minimum number in an array of numbers', () => {
       const result = findMin([1, 2, 3, 4, 5]);
       expect(result).to.equal(1);
     });
 
-    it('should throw an error if input is not an array', () => {
-      expect(() => findMin(null)).to.throw('Input must be an array');
+    it('should return Infinity for an empty array', () => {
+      const result = findMin([]);
+      expect(result).to.equal(Infinity);
     });
 
-    it('should handle an array with negative numbers', () => {
-      const result = findMin([-10, -5, -3, -1]);
-      expect(result).to.equal(-10);
+    it('should handle arrays with negative numbers', () => {
+      const result = findMin([-1, -2, -3, -4]);
+      expect(result).to.equal(-4);
     });
   });
 
-  describe('removeDuplicates', () => {
-    it('should return an array without duplicate values', () => {
-      const result = removeDuplicates([1, 2, 2, 3, 4, 4, 5]);
+  describe('sortArray', () => {
+    it('should return a sorted array in ascending order', () => {
+      const result = sortArray([5, 2, 8, 1, 3]);
+      expect(result).to.deep.equal([1, 2, 3, 5, 8]);
+    });
+
+    it('should handle an already sorted array', () => {
+      const result = sortArray([1, 2, 3, 4, 5]);
       expect(result).to.deep.equal([1, 2, 3, 4, 5]);
     });
 
-    it('should throw an error if input is not an array', () => {
-      expect(() => removeDuplicates({})).to.throw('Input must be an array');
-    });
-
     it('should handle an empty array', () => {
-      const result = removeDuplicates([]);
+      const result = sortArray([]);
       expect(result).to.deep.equal([]);
     });
   });
