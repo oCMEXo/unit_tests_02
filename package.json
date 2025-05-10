@@ -5,13 +5,32 @@
   "description": "Practice task for unit testing",
   "main": "index.js",
   "scripts": {
+    "lint": "eslint . --ext .js",
+    "lint:fix": "eslint . --ext .js --fix",
     "test": "mocha",
-    "coverage": "c8 mocha"
+    "prepare": "husky install"
   },
   "devDependencies": {
+    "@babel/core": "^7.27.1",
+    "@babel/preset-env": "^7.27.2",
+    "@eslint/js": "^9.26.0",
     "c8": "^7.12.0",
     "chai": "^4.5.0",
+    "eslint": "^9.26.0",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-n": "^17.18.0",
+    "eslint-plugin-promise": "^7.2.1",
+    "husky": "^8.0.3",
+    "lint-staged": "^15.5.2",
     "mocha": "^10.8.2",
     "mochawesome": "^7.1.3"
+  },
+  "lint-staged": {
+    "*.js": "eslint --fix"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   }
 }
