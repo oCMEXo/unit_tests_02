@@ -6,10 +6,10 @@
  * @returns {Array} - Filtered list of users.
  */
 export function filterUsersByAge(users, minAge, maxAge) {
-    if (!Array.isArray(users)) {
-        throw new Error('Users must be an array');
-    }
-    return users.filter(user => user.age >= minAge && user.age <= maxAge);
+  if (!Array.isArray(users)) {
+    throw new Error("Users must be an array");
+  }
+  return users.filter((user) => user.age >= minAge && user.age <= maxAge);
 }
 
 /**
@@ -18,10 +18,10 @@ export function filterUsersByAge(users, minAge, maxAge) {
  * @returns {Array} - Sorted list of users.
  */
 export function sortUsersByName(users) {
-    if (!Array.isArray(users)) {
-        throw new Error('Users must be an array');
-    }
-    return [...users].sort((a, b) => a.name.localeCompare(b.name));
+  if (!Array.isArray(users)) {
+    throw new Error("Users must be an array");
+  }
+  return [...users].sort((a, b) => a.name.localeCompare(b.name));
 }
 
 /**
@@ -31,10 +31,10 @@ export function sortUsersByName(users) {
  * @returns {Object|null} - Found user, or null if user not found.
  */
 export function findUserById(users, id) {
-    if (!Array.isArray(users)) {
-        throw new Error('Users must be an array');
-    }
-    return users.find(user => user.id === id) || null;
+  if (!Array.isArray(users)) {
+    throw new Error("Users must be an array");
+  }
+  return users.find((user) => user.id === id) || null;
 }
 
 /**
@@ -44,8 +44,8 @@ export function findUserById(users, id) {
  * @returns {boolean} - True if a user with this email exists, otherwise false.
  */
 export function isEmailTaken(users, email) {
-    if (!Array.isArray(users)) {
-        throw new Error('Users must be an array');
-    }
-    return users.some(user => user.email === email);
+  if (!Array.isArray(users)) {
+    throw new Error("Users must be an array");
+  }
+  return users.some((user) => user.email === email);
 }
