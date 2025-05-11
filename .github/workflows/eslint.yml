@@ -10,28 +10,49 @@ jobs:
   lint-and-test:
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        node-version: ['20']
+
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Set up Node.js
+      - name: Set up Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
 
-      - name: Install dependencies
-        run: npm install --no-audit --no-fund
-
-      - name: Fix husky permissions (optional but helps)
+      - name: Clean install dependencies
         run: |
-          chmod +x .husky/* || true
-          npx husky install || true
+          npm ci --no-audit --no-fund
+          npm rebuild  # Пересборка native модулей если есть
 
-      - name: Run husky install manually
-        run: npx husky install || true
+      - name: Setup Husky
+        run: |
+          # Явная установка прав для husky
+          git config --global --add safe.directory /github/workspace
+          npm run prepare || true
+          chmod -R +x .husky/ || true
+
+      - name: Verify Node environment
+        run: |
+          node -v
+          npm -v
+          npx husky --version || echo "Husky not available"
 
       - name: Run ESLint
-        run: npx eslint . --ext .js,.jsx
+        run: npx eslint . --ext .js,.jsx,.ts,.tsx --max-warnings=0
 
-      - name: Run tests
-        run: npm test
+      - name: Run tests with coverage
+        run: |
+          npm test -- --coverage
+          echo "Test results:"
+          cat coverage/lcov.info | grep -E '^(LF|LH)' || true
+
+      - name: Upload coverage to Codecov (optional)
+        if: success()
+        uses: codecov/codecov-action@v4

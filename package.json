@@ -8,7 +8,7 @@
     "lint": "eslint . --ext .js",
     "lint:fix": "eslint . --ext .js --fix",
     "test": "mocha",
-    "prepare": "husky install"
+    "prepare": "husky install || true"
   },
   "devDependencies": {
     "@babel/core": "^7.27.1",
@@ -22,7 +22,8 @@
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-n": "^17.18.0",
     "eslint-plugin-promise": "^7.2.1",
-    "husky": "^8.0.3  ",
+    "glob": "^11.0.2",
+    "husky": "^9.1.7",
     "lint-staged": "^15.5.2",
     "markdownlint": "^0.38.0",
     "mocha": "^10.8.2",
