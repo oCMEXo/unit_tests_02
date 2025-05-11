@@ -22,7 +22,7 @@
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-n": "^17.18.0",
     "eslint-plugin-promise": "^7.2.1",
-    "husky": "^8.0.0",
+    "husky": "^8.0.3  ",
     "lint-staged": "^15.5.2",
     "markdownlint": "^0.38.0",
     "mocha": "^10.8.2",
