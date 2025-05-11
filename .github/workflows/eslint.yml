@@ -19,10 +19,12 @@ jobs:
         with:
           node-version: '20'
       - name: Install dependencies
-        run: npm install
+        run: npm install --no-audit --no-fund
 
-      - name: Fix husky permissions
-        run: chmod +x .husky/* || true
+      - name: Fix husky permissions (optional but helps)
+        run: |
+          chmod +x .husky/* || true
+          npx husky install || true
 
       - name: Run husky install manually
         run: npx husky install || true
