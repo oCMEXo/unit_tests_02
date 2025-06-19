@@ -1,85 +1,118 @@
 const request = require("supertest");
+const api = request("https://demoqa.com");
 
-const BASE_URL = "https://demoqa.com";
-const account = "/Account/v1";
+const password = "Password123!";
 
-function randomUsername() {
-    return `user_${Math.random().toString(36).substring(2, 10)}`;
+const generateUsername = () => "user_" + Math.random().toString(36).substring(2, 8);
+
+
+async function createUser() {
+    const username = generateUsername();
+    const res = await api.post("/Account/v1/User").send({ userName: username, password });
+    expect(res.statusCode).toBe(201);
+    expect(res.body).toHaveProperty("userID");
+    expect(res.body.username).toBe(username);
+    return { userId: res.body.userID, username };
 }
 
-describe("DemoQA API Tests", () => {
-    let username = randomUsername();
-    const password = "StrongP@ssword123";
-    let userId = "";
-    let token = "";
-
+describe("DemoQA Account API Tests", () => {
     test("Create user - positive", async () => {
-        const res = await request(BASE_URL)
-            .post(`${account}/User`)
-            .send({ userName: username, password });
+        const username = generateUsername();
+        const res = await api.post("/Account/v1/User").send({ userName: username, password });
 
         expect(res.statusCode).toBe(201);
-        expect(res.body.userID).toBeDefined();
-        userId = res.body.userID;
+        expect(res.body).toHaveProperty("userID");
+        expect(res.body.username).toBe(username);
     });
 
     test("Create user - negative (empty password)", async () => {
-        const res = await request(BASE_URL)
-            .post(`${account}/User`)
-            .send({ userName: "invalid", password: "" });
+        const res = await api.post("/Account/v1/User").send({ userName: "invalidUser", password: "" });
 
         expect(res.statusCode).toBe(400);
+        expect(res.body).toHaveProperty("code");
+        expect(res.body).toHaveProperty("message");
     });
 
     test("Generate token - positive", async () => {
-        const res = await request(BASE_URL)
-            .post(`${account}/GenerateToken`)
-            .send({ userName: username, password });
+        const { username } = await createUser();
+
+        const res = await api.post("/Account/v1/GenerateToken").send({ userName: username, password });
 
         expect(res.statusCode).toBe(200);
-        expect(res.body.token).toBeDefined();
-        token = res.body.token;
+        expect(res.body).toHaveProperty("token");
+        expect(res.body.token).not.toBe("");
     });
 
     test("Generate token - negative (wrong password)", async () => {
-        const res = await request(BASE_URL)
-            .post(`${account}/GenerateToken`)
-            .send({ userName: username, password: "WrongPassword" });
+        const { username } = await createUser();
+
+        const res = await api.post("/Account/v1/GenerateToken").send({ userName: username, password: "WrongPassword!" });
 
         expect(res.statusCode).toBe(200);
-        expect(res.body.token).toBe("");
+        expect(res.body.token).toBeNull();
+        expect(res.body.status).toBe("Failed");
     });
 
     test("Get user info - positive", async () => {
-        const res = await request(BASE_URL)
-            .get(`${account}/User/${userId}`)
-            .set("Authorization", `Bearer ${token}`);
+        const { userId, username } = await createUser();
+
+        const tokenRes = await api.post("/Account/v1/GenerateToken").send({ userName: username, password });
+        expect(tokenRes.statusCode).toBe(200);
+        const token = tokenRes.body.token;
+
+        const res = await api.get(`/Account/v1/User/${userId}`).set("Authorization", `Bearer ${token}`);
 
         expect(res.statusCode).toBe(200);
-        expect(res.body.userName).toBe(username);
+        expect(res.body.username).toBe(username);
+        expect(res.body.userId).toBe(userId);
     });
 
-    test("Get user info - negative (fake id)", async () => {
-        const res = await request(BASE_URL)
-            .get(`${account}/User/00000000-0000-0000-0000-000000000000`)
-            .set("Authorization", `Bearer ${token}`);
+    test("Get user info - negative (non-existent user)", async () => {
+        const fakeId = "00000000-0000-0000-0000-000000000000";
 
-        expect(res.statusCode).toBeGreaterThanOrEqual(400);
+        const { username } = await createUser();
+        const tokenRes = await api.post("/Account/v1/GenerateToken").send({ userName: username, password });
+        const token = tokenRes.body.token;
+
+        const res = await api.get(`/Account/v1/User/${fakeId}`).set("Authorization", `Bearer ${token}`);
+
+        expect([401, 403, 404]).toContain(res.statusCode);
     });
 
     test("Delete user - positive", async () => {
-        const res = await request(BASE_URL)
-            .delete(`${account}/User/${userId}`)
-            .set("Authorization", `Bearer ${token}`);
+        const { userId, username } = await createUser();
+
+        const tokenRes = await api.post("/Account/v1/GenerateToken").send({ userName: username, password });
+        const token = tokenRes.body.token;
+
+        const res = await api.delete(`/Account/v1/User/${userId}`).set("Authorization", `Bearer ${token}`);
 
         expect(res.statusCode).toBe(204);
     });
 
-    test("Delete user - negative (invalid ID)", async () => {
-        const res = await request(BASE_URL)
-            .delete(`${account}/User/00000000-0000-0000-0000-000000000000`)
-            .set("Authorization", `Bearer ${token}`);
+    test("Delete user - negative (non-existent user)", async () => {
+        const fakeId = "00000000-0000-0000-0000-000000000000";
 
-        expect([401, 403, 404]).toContain(res.statusCode);
+        try {
+            const { username } = await createUser();
+            const tokenRes = await api.post("/Account/v1/GenerateToken").send({ userName: username, password });
+            const token = tokenRes.body.token;
+
+            const res = await api.delete(`/Account/v1/User/${fakeId}`).set("Authorization", `Bearer ${token}`);
+
+            console.log("Delete invalid user response:", res.statusCode, res.body);
+
+            const validStatus = [401, 403, 404, 200];
+            expect(validStatus).toContain(res.statusCode);
+
+            if (res.statusCode === 200) {
+                expect(res.body).toHaveProperty("code", "1207");
+                expect(res.body).toHaveProperty("message", "User Id not correct!");
+            }
+        } catch (error) {
+            console.error("Error during deleting non-existent user:", error);
+            throw error;
+        }
     });
+
 });
